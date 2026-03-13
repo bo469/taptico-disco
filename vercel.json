@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/sls", "destination": "/sls/index.html" },
+    { "source": "/sls/", "destination": "/sls/index.html" }
+  ]
+}
