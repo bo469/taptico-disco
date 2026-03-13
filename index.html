@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taptico AI Business Assessment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --card: #1a1a2e;
+      --card2: #16213e;
+      --accent: #4361ee;
+      --accent-hover: #3451d1;
+      --teal: #00f5d4;
+      --white: #ffffff;
+      --muted: #8892a4;
+      --border: rgba(255,255,255,0.08);
+      --input-bg: #0d1117;
+      --radius: 14px;
+      --shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 16px 60px;
+    }
+
+    /* ─── Header ─────────────────────────────────── */
+    .header {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 0 24px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .step-label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ─── Progress bar ─────────────────────────────── */
+    .progress-wrap {
+      width: 100%;
+      max-width: 680px;
+      background: var(--border);
+      border-radius: 99px;
+      height: 5px;
+      margin-bottom: 36px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), var(--teal));
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ─── Card ─────────────────────────────────────── */
+    .card {
+      width: 100%;
+      max-width: 680px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 44px 48px;
+      box-shadow: var(--shadow);
+    }
+
+    @media (max-width: 600px) {
+      .card { padding: 32px 24px; }
+    }
+
+    /* ─── Steps ─────────────────────────────────────── */
+    .step { display: none; animation: fadeIn 0.35s ease; }
+    .step.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Typography ─────────────────────────────────── */
+    .step-title {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .step-sub {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 36px;
+      line-height: 1.6;
+    }
+
+    /* ─── Welcome ─────────────────────────────────────── */
+    .welcome-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(67,97,238,0.15);
+      border: 1px solid rgba(67,97,238,0.3);
+      border-radius: 99px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .welcome-headline {
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .welcome-headline span { color: var(--accent); }
+
+    .welcome-body {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 40px;
+      max-width: 520px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 560px) {
+      .feature-grid { grid-template-columns: 1fr; }
+      .welcome-headline { font-size: 28px; }
+    }
+
+    .feature-chip {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .feature-chip .icon { font-size: 24px; margin-bottom: 8px; }
+    .feature-chip .label { font-size: 13px; color: var(--muted); }
+
+    /* ─── Form elements ─────────────────────────────── */
+    .field { margin-bottom: 24px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--white);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(67,97,238,0.2);
+    }
+
+    input.field-error {
+      border-color: #e63946 !important;
+      box-shadow: 0 0 0 3px rgba(230,57,70,0.2) !important;
+    }
+
+    select option { background: #1a1a2e; }
+
+    textarea { min-height: 120px; resize: vertical; line-height: 1.6; }
+
+    /* ─── Checkboxes ─────────────────────────────────── */
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 480px) { .check-grid { grid-template-columns: 1fr; } }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+
+    .check-item:hover { border-color: rgba(67,97,238,0.4); }
+    .check-item.checked {
+      border-color: var(--accent);
+      background: rgba(67,97,238,0.1);
+    }
+
+    .check-item input[type="checkbox"] { display: none; }
+
+    .check-box {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-radius: 5px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .check-item.checked .check-box {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .check-box::after {
+      content: '✓';
+      font-size: 12px;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .check-item.checked .check-box::after { opacity: 1; }
+
+    .check-text { font-size: 14px; font-weight: 500; }
+
+    /* ─── Buttons ─────────────────────────────────────── */
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 40px;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      flex: 1;
+    }
+
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
+
+    .btn-welcome {
+      background: linear-gradient(135deg, var(--accent), #7b2ff7);
+      color: white;
+      font-size: 16px;
+      padding: 18px 36px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 340px;
+      box-shadow: 0 4px 24px rgba(67,97,238,0.4);
+    }
+
+    .btn-welcome:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(67,97,238,0.5);
+    }
+
+    /* ─── CTA Book Call Button ─────────────────────── */
+    .btn-cta-call {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      background: #4361ee;
+      color: #ffffff;
+      font-family: 'Oswald', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      margin-top: 28px;
+      box-shadow: 0 6px 28px rgba(67,97,238,0.45);
+      transition: all 0.2s;
+    }
+
+    .btn-cta-call:hover {
+      background: #3451d1;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 36px rgba(67,97,238,0.55);
+    }
+
+    .cta-email-note {
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .cta-email-note a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .cta-email-note a:hover { text-decoration: underline; }
+
+    /* ─── Tech Stack grid ─────────────────────────────── */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 480px) { .stack-grid { grid-template-columns: 1fr; } }
+
+    .stack-field label { margin-bottom: 8px; }
+
+    /* ─── Contact two-col ────────────────────────────── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 480px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ─── Opportunity Cards ───────────────────────────── */
+    .opp-intro {
+      background: rgba(0,245,212,0.08);
+      border: 1px solid rgba(0,245,212,0.2);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      font-size: 15px;
+      color: var(--teal);
+      line-height: 1.6;
+    }
+
+    .opp-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+
+    .opp-card {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      animation: slideIn 0.4s ease both;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .opp-card:nth-child(1) { animation-delay: 0.1s; }
+    .opp-card:nth-child(2) { animation-delay: 0.2s; }
+    .opp-card:nth-child(3) { animation-delay: 0.3s; }
+    .opp-card:nth-child(4) { animation-delay: 0.4s; }
+    .opp-card:nth-child(5) { animation-delay: 0.5s; }
+
+    .opp-icon { font-size: 28px; line-height: 1; flex-shrink: 0; }
+
+    .opp-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .opp-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    .opp-final {
+      background: linear-gradient(135deg, rgba(67,97,238,0.15), rgba(0,245,212,0.08));
+      border: 1px solid rgba(67,97,238,0.3);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .opp-final p { font-size: 15px; color: var(--muted); line-height: 1.7; }
+
+    .opp-final .big-check { font-size: 40px; margin-bottom: 12px; }
+
+    .opp-final h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; color: var(--teal); }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 28px 0;
+    }
+
+    /* ─── Summary name highlight ────────────────────── */
+    .highlight { color: var(--accent); font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">TAPTICO</div>
+    <div class="step-label" id="step-label">Step 1 of 7</div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-wrap">
+    <div class="progress-fill" id="progress-fill" style="width: 14.28%"></div>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- ── STEP 1: Welcome ──────────────────────────── -->
+    <div class="step active" id="step-1">
+      <div class="welcome-badge">✦ AI Assessment</div>
+      <div class="welcome-headline">Find out where <span>AI can transform</span> your business</div>
+      <p class="welcome-body">
+        Answer 6 quick questions and we'll map your biggest AI opportunities — no fluff, no jargon.
+        Just a clear picture of where automation can save you time, make you money, and cut the chaos.
+      </p>
+      <div class="feature-grid">
+        <div class="feature-chip">
+          <div class="icon">⚡</div>
+          <div class="label">5 min assessment</div>
+        </div>
+        <div class="feature-chip">
+          <div class="icon">🎯</div>
+          <div class="label">Personalized results</div>
+        </div>
+        <div class="feature-chip">
+          <div class="icon">🤝</div>
+          <div class="label">Free strategy call</div>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn btn-welcome" onclick="goTo(2)">Start Your AI Assessment →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 2: Company Basics ───────────────────── -->
+    <div class="step" id="step-2">
+      <div class="step-title">Tell us about your company</div>
+      <p class="step-sub">Basic info helps us tailor AI recommendations to your specific situation.</p>
+
+      <div class="field">
+        <label for="company-name">Company Name</label>
+        <input type="text" id="company-name" placeholder="Acme Corp" />
+      </div>
+
+      <div class="field">
+        <label for="industry">Industry</label>
+        <select id="industry">
+          <option value="" disabled selected>Select your industry</option>
+          <option>Real Estate</option>
+          <option>Marketing / Agency</option>
+          <option>E-commerce / Retail</option>
+          <option>Professional Services</option>
+          <option>Healthcare</option>
+          <option>Finance / Accounting</option>
+          <option>Construction / Trades</option>
+          <option>SaaS / Tech</option>
+          <option>Consulting</option>
+          <option>Education</option>
+          <option>Hospitality / Restaurants</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="revenue">Annual Revenue Range</label>
+        <select id="revenue">
+          <option value="" disabled selected>Select revenue range</option>
+          <option>Under $250K</option>
+          <option>$250K – $500K</option>
+          <option>$500K – $1M</option>
+          <option>$1M – $5M</option>
+          <option>$5M – $10M</option>
+          <option>$10M+</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="team-size">Team Size</label>
+        <select id="team-size">
+          <option value="" disabled selected>Select team size</option>
+          <option>Just me</option>
+          <option>2–5 people</option>
+          <option>6–15 people</option>
+          <option>16–50 people</option>
+          <option>50+ people</option>
+        </select>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(1)">← Back</button>
+        <button class="btn btn-primary" onclick="goTo(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: Current Workflows ─────────────────── -->
+    <div class="step" id="step-3">
+      <div class="step-title">Where does your time go?</div>
+      <p class="step-sub">Check everything that eats up meaningful hours in a typical week.</p>
+
+      <div class="check-grid" id="workflow-checks">
+        <div class="check-item" data-value="Sales outreach" onclick="toggleCheck(this)">
+          <input type="checkbox" />
+          <div class="check-box"></div>
+          <span class="check-text">🎯 Sales outreach</span>
+        </div>
+        <div class="check-item" data-value="Customer follow-up" onclick="toggleCheck(this)">
+          <input type="checkbox" />
+          <div class="check-box"></div>
+          <span class="check-text">📞 Customer follow-up</span>
+        </div>
+        <div class="check-item" data-value="Content creation" onclick="toggleCheck(this)">
+          <input type="checkbox" />
+          <div class="check-box"></div>
+          <span class="check-text">✍️ Content creation</span>
+        </div>
+        <div class="check-item" data-value="Data/reporting" onclick="toggleCheck(this)">
+          <input type="checkbox" />
+          <div class="check-box"></div>
+          <span class="check-text">📊 Data / reporting</span>
+        </div>
+        <div class="check-item" data-value="Scheduling" onclick="toggleCheck(this)">
+          <input type="checkbox" />
+          <div class="check-box"></div>
+          <span class="check-text">📅 Scheduling</span>
+        </div>
+        <div class="check-item" data-value="Operations/admin" onclick="toggleCheck(this)">
+          <input type="checkbox" />
+          <div class="check-box"></div>
+          <span class="check-text">⚙️ Operations / admin</span>
+        </div>
+        <div class="check-item" data-value="Hiring/HR" onclick="toggleCheck(this)">
+          <input type="checkbox" />
+          <div class="check-box"></div>
+          <span class="check-text">👥 Hiring / HR</span>
+        </div>
+        <div class="check-item" data-value="Other" onclick="toggleCheck(this)">
+          <input type="checkbox" />
+          <div class="check-box"></div>
+          <span class="check-text">🔧 Other</span>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(2)">← Back</button>
+        <button class="btn btn-primary" onclick="goTo(4)">Next →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 4: Pain Points ─────────────────────── -->
+    <div class="step" id="step-4">
+      <div class="step-title">What's slowing you down?</div>
+      <p class="step-sub">Be brutally honest. The more specific you are, the better we can help.</p>
+
+      <div class="field">
+        <label>What's the biggest drain on your team right now?</label>
+        <div class="check-grid" id="pain-checks">
+          <div class="check-item" data-value="Manual data entry" onclick="toggleCheck(this)">
+            <input type="checkbox" />
+            <div class="check-box"></div>
+            <span class="check-text">📝 Manual data entry</span>
+          </div>
+          <div class="check-item" data-value="Slow follow-up" onclick="toggleCheck(this)">
+            <input type="checkbox" />
+            <div class="check-box"></div>
+            <span class="check-text">🐌 Slow follow-up</span>
+          </div>
+          <div class="check-item" data-value="Inconsistent outreach" onclick="toggleCheck(this)">
+            <input type="checkbox" />
+            <div class="check-box"></div>
+            <span class="check-text">📉 Inconsistent outreach</span>
+          </div>
+          <div class="check-item" data-value="Reporting takes forever" onclick="toggleCheck(this)">
+            <input type="checkbox" />
+            <div class="check-box"></div>
+            <span class="check-text">⏳ Reporting takes forever</span>
+          </div>
+          <div class="check-item" data-value="Content takes too long" onclick="toggleCheck(this)">
+            <input type="checkbox" />
+            <div class="check-box"></div>
+            <span class="check-text">🧱 Content takes too long</span>
+          </div>
+          <div class="check-item" data-value="Too many tools, no system" onclick="toggleCheck(this)">
+            <input type="checkbox" />
+            <div class="check-box"></div>
+            <span class="check-text">🌀 Too many tools, no system</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:24px;">
+        <label for="pain-text">Describe your biggest frustration (in your own words)</label>
+        <textarea id="pain-text" placeholder="e.g. We lose leads because no one follows up fast enough, and our team spends 3 hours a week copy-pasting data between systems..."></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(3)">← Back</button>
+        <button class="btn btn-primary" onclick="goTo(5)">Next →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 5: Tech Stack ──────────────────────── -->
+    <div class="step" id="step-5">
+      <div class="step-title">What tools are you running?</div>
+      <p class="step-sub">This helps us find integration opportunities — no need to be exhaustive.</p>
+
+      <div class="stack-grid">
+        <div class="stack-field field">
+          <label for="crm">CRM</label>
+          <input type="text" id="crm" placeholder="HubSpot, Salesforce, GHL…" />
+        </div>
+        <div class="stack-field field">
+          <label for="email-platform">Email Platform</label>
+          <input type="text" id="email-platform" placeholder="Instantly, Mailchimp, Klaviyo…" />
+        </div>
+        <div class="stack-field field">
+          <label for="project-mgmt">Project Management</label>
+          <input type="text" id="project-mgmt" placeholder="Asana, Monday, Notion…" />
+        </div>
+        <div class="stack-field field">
+          <label for="social">Social Media</label>
+          <input type="text" id="social" placeholder="Buffer, Later, Hootsuite…" />
+        </div>
+        <div class="stack-field field">
+          <label for="communication">Communication</label>
+          <input type="text" id="communication" placeholder="Slack, Teams, Discord…" />
+        </div>
+        <div class="stack-field field">
+          <label for="other-tools">Other Tools</label>
+          <input type="text" id="other-tools" placeholder="Zapier, Make, QuickBooks…" />
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(4)">← Back</button>
+        <button class="btn btn-primary" onclick="goTo(6)">Next →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 6: Goals ───────────────────────────── -->
+    <div class="step" id="step-6">
+      <div class="step-title">What does a win look like?</div>
+      <p class="step-sub">If we knocked this out of the park, what would be different in 90 days?</p>
+
+      <div class="field">
+        <label for="goal-revenue">Revenue / Financial Goal</label>
+        <input type="text" id="goal-revenue" placeholder="e.g. Close 3 more clients per month, add $30K MRR…" />
+      </div>
+
+      <div class="field">
+        <label for="goal-leads">Lead Generation Goal</label>
+        <input type="text" id="goal-leads" placeholder="e.g. 50 qualified leads per week, 25% more pipeline…" />
+      </div>
+
+      <div class="field">
+        <label for="goal-time">Time Savings Goal</label>
+        <input type="text" id="goal-time" placeholder="e.g. Eliminate 10 hrs/week of manual work, automate follow-up…" />
+      </div>
+
+      <div class="field">
+        <label for="goal-other">Anything else you want to achieve?</label>
+        <textarea id="goal-other" style="min-height:90px;" placeholder="Better reporting, faster onboarding, happier team…"></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(5)">← Back</button>
+        <button class="btn btn-primary" onclick="goTo(7)">Next →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 7: Contact Capture ─────────────────── -->
+    <div class="step" id="step-7">
+      <div class="step-title">Almost there —</div>
+      <p class="step-sub">Who should we send your AI roadmap to?</p>
+
+      <div class="two-col">
+        <div class="field">
+          <label for="contact-first">First Name <span style="color:#e63946;">*</span></label>
+          <input type="text" id="contact-first" placeholder="Jane" />
+        </div>
+        <div class="field">
+          <label for="contact-last">Last Name <span style="color:#e63946;">*</span></label>
+          <input type="text" id="contact-last" placeholder="Smith" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="contact-email">Email Address <span style="color:#e63946;">*</span></label>
+        <input type="email" id="contact-email" placeholder="jane@company.com" />
+      </div>
+
+      <div class="field">
+        <label for="contact-phone">Phone Number <span style="color:var(--muted); font-size:11px; text-transform:none; font-weight:400; letter-spacing:0;">(optional)</span></label>
+        <input type="tel" id="contact-phone" placeholder="+1 (555) 000-0000" />
+      </div>
+
+      <div class="field">
+        <label for="contact-company">Company Name</label>
+        <input type="text" id="contact-company" placeholder="Acme Corp" />
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(6)">← Back</button>
+        <button class="btn btn-primary" onclick="submitContact()">See My AI Opportunities →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 8: AI Opportunity Summary ────────────── -->
+    <div class="step" id="step-8">
+      <div class="step-title">Your AI Opportunity Report</div>
+
+      <div class="opp-intro" id="opp-intro">
+        Here's what we found for <span class="highlight" id="summary-company">your company</span>. These aren't generic suggestions —
+        they're mapped directly to the time sinks and goals you just told us about.
+      </div>
+
+      <div class="opp-list" id="opp-list">
+        <!-- Dynamically populated -->
+      </div>
+
+      <!-- Book a Strategy Call CTA -->
+      <a href="https://calendly.com/nick-taptico" target="_blank" class="btn-cta-call">
+        📅 Book Your Free AI Strategy Call
+      </a>
+      <p class="cta-email-note">Or email us at <a href="mailto:hello@taptico.com">hello@taptico.com</a></p>
+
+      <hr class="divider" />
+
+      <div class="opp-final">
+        <div class="big-check">✅</div>
+        <h3>What happens next?</h3>
+        <p>
+          Your personalized AI roadmap is ready. Book a free 30-minute strategy call with the Taptico team to build your implementation plan.
+        </p>
+      </div>
+
+      <div class="btn-row" style="margin-top:28px; justify-content:center;">
+        <button class="btn btn-secondary" onclick="goTo(7)" style="flex:0;">← Edit Answers</button>
+        <button class="btn btn-primary" onclick="restartAssessment()" style="flex:0;">Start Over</button>
+      </div>
+    </div>
+
+  </div><!-- /.card -->
+
+  <script>
+    let currentStep = 1;
+    const TOTAL_STEPS = 7; // steps 1-7 are question/capture steps; step 8 = results
+
+    function goTo(n) {
+      const from = document.getElementById('step-' + currentStep);
+      const to   = document.getElementById('step-' + n);
+      if (!to) return;
+
+      // Auto-fill company name into contact step when navigating to step 7
+      if (n === 7) {
+        const companyVal = document.getElementById('company-name').value.trim();
+        const contactCompany = document.getElementById('contact-company');
+        if (companyVal && !contactCompany.value.trim()) {
+          contactCompany.value = companyVal;
+        }
+      }
+
+      from.classList.remove('active');
+      to.classList.add('active');
+      currentStep = n;
+
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateProgress() {
+      const fill  = document.getElementById('progress-fill');
+      const label = document.getElementById('step-label');
+
+      const pct = Math.min((currentStep / TOTAL_STEPS) * 100, 100);
+      fill.style.width = pct + '%';
+
+      if (currentStep === 8) {
+        label.textContent = 'Results';
+      } else {
+        label.textContent = 'Step ' + currentStep + ' of ' + TOTAL_STEPS;
+      }
+    }
+
+    function toggleCheck(el) {
+      el.classList.toggle('checked');
+    }
+
+    function getChecked(containerId) {
+      const container = document.getElementById(containerId);
+      const items = container.querySelectorAll('.check-item.checked');
+      return Array.from(items).map(i => i.dataset.value);
+    }
+
+    function submitContact() {
+      const firstName = document.getElementById('contact-first');
+      const lastName  = document.getElementById('contact-last');
+      const email     = document.getElementById('contact-email');
+
+      let valid = true;
+
+      [firstName, lastName, email].forEach(el => {
+        el.classList.remove('field-error');
+        if (!el.value.trim()) {
+          el.classList.add('field-error');
+          valid = false;
+        }
+      });
+
+      // Basic email format check
+      if (email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+        email.classList.add('field-error');
+        valid = false;
+      }
+
+      if (!valid) {
+        const firstError = document.querySelector('.field-error');
+        if (firstError) firstError.focus();
+        return;
+      }
+
+      generateSummary();
+    }
+
+    function generateSummary() {
+      const companyName  = document.getElementById('contact-company').value.trim()
+                        || document.getElementById('company-name').value.trim()
+                        || 'Your Company';
+      const workflows    = getChecked('workflow-checks');
+      const pains        = getChecked('pain-checks');
+
+      // Update intro
+      document.getElementById('summary-company').textContent = companyName;
+
+      // Build opportunity list
+      const opps = [];
+
+      const workflowMap = {
+        'Sales outreach':    { icon: '🎯', title: 'AI Prospecting Agent', desc: 'Qualified leads on autopilot — research, personalize, and send outreach at scale without lifting a finger.' },
+        'Customer follow-up':{ icon: '🤖', title: 'Automated Follow-Up Agent', desc: 'Never lose a lead again. AI follows up instantly, nurtures over time, and flags hot prospects for your team.' },
+        'Content creation':  { icon: '✍️', title: 'AI Content Engine', desc: '10x your content output — blog posts, social, emails, scripts — all on-brand, all in minutes.' },
+        'Data/reporting':    { icon: '📊', title: 'Automated Reporting Suite', desc: 'Real-time dashboards, zero manual work. Your numbers, always current, always accurate.' },
+        'Scheduling':        { icon: '📅', title: 'Smart Scheduling Automation', desc: 'AI handles booking, rescheduling, and reminders — no more back-and-forth email chains.' },
+        'Operations/admin':  { icon: '⚙️', title: 'Ops Automation Layer', desc: 'Eliminate the repetitive admin that\'s draining your team. Automate intake, routing, and data entry across your stack.' },
+        'Hiring/HR':         { icon: '👥', title: 'AI Talent & HR Workflows', desc: 'Screen resumes, schedule interviews, and onboard new hires faster with automated HR pipelines.' },
+      };
+
+      const painMap = {
+        'Manual data entry':        { icon: '🔄', title: 'Data Sync & Entry Elimination', desc: 'Connect your tools with smart two-way sync. Data flows automatically — no copy-paste, no errors.' },
+        'Slow follow-up':           { icon: '⚡', title: 'Instant Response System', desc: 'AI responds to leads within 60 seconds, 24/7 — before your competitor even sees the notification.' },
+        'Inconsistent outreach':    { icon: '📬', title: 'Automated Outreach Sequencer', desc: 'Set your sequences once. AI runs them consistently, adjusts based on replies, and never drops the ball.' },
+        'Reporting takes forever':  { icon: '📈', title: 'Automated Analytics Pipeline', desc: 'One click to a full business snapshot. Pull data from every tool into a single live dashboard.' },
+        'Content takes too long':   { icon: '🚀', title: 'AI Content Accelerator', desc: 'Brief → draft → publish in under an hour. AI drafts, you approve, your brand stays consistent.' },
+        'Too many tools, no system':{ icon: '🔗', title: 'Unified Tech Stack Integration', desc: 'We\'ll map your entire stack, identify redundancies, and build automation bridges between your tools.' },
+      };
+
+      // Add from workflows
+      workflows.forEach(w => {
+        if (workflowMap[w]) opps.push(workflowMap[w]);
+      });
+
+      // Add from pains (avoid duplicates by title)
+      const titles = new Set(opps.map(o => o.title));
+      pains.forEach(p => {
+        if (painMap[p] && !titles.has(painMap[p].title)) {
+          opps.push(painMap[p]);
+          titles.add(painMap[p].title);
+        }
+      });
+
+      // Limit to 4, then always append the audit
+      const topOpps = opps.slice(0, 4);
+      topOpps.push({
+        icon: '🚀',
+        title: 'Custom AI Workflow Audit',
+        desc: 'We\'ll map your entire business for AI opportunities — a full blueprint of what to automate, in what order, for maximum ROI.'
+      });
+
+      // If no selections, show a default set
+      if (opps.length === 0) {
+        topOpps.unshift(
+          { icon: '🤖', title: 'Automated Follow-Up Agent', desc: 'Never lose a lead again.' },
+          { icon: '🎯', title: 'AI Prospecting Agent', desc: 'Qualified leads on autopilot.' },
+          { icon: '📊', title: 'Automated Reporting Suite', desc: 'Real-time dashboards, zero manual work.' }
+        );
+      }
+
+      // Render
+      const list = document.getElementById('opp-list');
+      list.innerHTML = '';
+
+      topOpps.forEach((opp, i) => {
+        const card = document.createElement('div');
+        card.className = 'opp-card';
+        card.style.animationDelay = (i * 0.1 + 0.1) + 's';
+        card.innerHTML = `
+          <div class="opp-icon">${opp.icon}</div>
+          <div>
+            <div class="opp-title">${opp.title}</div>
+            <div class="opp-desc">${opp.desc}</div>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+
+      goTo(8);
+    }
+
+    function restartAssessment() {
+      // Clear all inputs
+      document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], select, textarea').forEach(el => {
+        el.value = '';
+        if (el.tagName === 'SELECT') el.selectedIndex = 0;
+        el.classList.remove('field-error');
+      });
+      document.querySelectorAll('.check-item.checked').forEach(el => el.classList.remove('checked'));
+      goTo(1);
+    }
+  </script>
+</body>
+</html>
