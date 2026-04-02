@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Discovery — The Stein Firm × Taptico</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --card: #1a1a2e;
+      --card2: #16213e;
+      --accent: #4361ee;
+      --accent-hover: #3451d1;
+      --teal: #00f5d4;
+      --white: #ffffff;
+      --muted: #8892a4;
+      --border: rgba(255,255,255,0.08);
+      --input-bg: #0d1117;
+      --radius: 14px;
+      --shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 16px 60px;
+    }
+
+    /* ─── Header ─────────────────────────────────── */
+    .header {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 0 24px;
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-img {
+      height: 28px;
+      width: auto;
+    }
+
+    .logo-text {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .step-label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ─── Progress bar ─────────────────────────────── */
+    .progress-wrap {
+      width: 100%;
+      max-width: 680px;
+      background: var(--border);
+      border-radius: 99px;
+      height: 5px;
+      margin-bottom: 36px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), var(--teal));
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ─── Card ─────────────────────────────────────── */
+    .card {
+      width: 100%;
+      max-width: 680px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px 44px;
+      box-shadow: var(--shadow);
+    }
+
+    @media (max-width: 600px) {
+      .card { padding: 28px 20px; }
+    }
+
+    /* ─── Steps ─────────────────────────────────────── */
+    .step { display: none; }
+    .step.active { display: block; }
+
+    /* ─── Welcome Step ──────────────────────────────── */
+    .welcome-badge {
+      display: inline-block;
+      background: rgba(67,97,238,0.15);
+      border: 1px solid rgba(67,97,238,0.3);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 99px;
+      margin-bottom: 24px;
+    }
+
+    .welcome-headline {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .welcome-headline span { color: var(--teal); }
+
+    .welcome-body {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .client-badge {
+      background: rgba(0,245,212,0.08);
+      border: 1px solid rgba(0,245,212,0.2);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      font-size: 14px;
+      color: var(--teal);
+      line-height: 1.6;
+    }
+
+    .client-badge strong { color: var(--white); }
+
+    .feature-grid {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+
+    .feature-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .feature-chip .icon { font-size: 18px; }
+
+    /* ─── Buttons ───────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      padding: 14px 28px;
+    }
+
+    .btn-welcome {
+      background: linear-gradient(135deg, var(--accent), #6c63ff);
+      color: var(--white);
+      width: 100%;
+      font-size: 16px;
+      padding: 16px;
+      border-radius: 12px;
+    }
+
+    .btn-welcome:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(67,97,238,0.4); }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+      flex: 1;
+    }
+
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: var(--card2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      flex: 0 0 auto;
+    }
+
+    .btn-secondary:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+      align-items: center;
+    }
+
+    /* ─── Step titles ────────────────────────────────── */
+    .step-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .step-sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    /* ─── Form fields ────────────────────────────────── */
+    .field {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(67,97,238,0.15);
+    }
+
+    input.prefilled, select.prefilled {
+      color: var(--teal);
+      border-color: rgba(0,245,212,0.25);
+    }
+
+    textarea { min-height: 110px; resize: vertical; }
+
+    select option { background: #1a1a2e; }
+
+    .field-error { border-color: #e63946 !important; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 480px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ─── Checkboxes ─────────────────────────────────── */
+    .check-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 480px) { .check-grid { grid-template-columns: 1fr; } }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .check-item:hover { border-color: rgba(67,97,238,0.4); }
+
+    .check-item.checked {
+      border-color: var(--accent);
+      background: rgba(67,97,238,0.12);
+    }
+
+    .check-item input[type="checkbox"] { display: none; }
+
+    .check-box {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-radius: 5px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .check-item.checked .check-box {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .check-item.checked .check-box::after {
+      content: '';
+      width: 5px;
+      height: 9px;
+      border: 2px solid white;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translateY(-1px);
+    }
+
+    .check-text { font-size: 14px; font-weight: 500; line-height: 1.3; }
+
+    /* ─── Stack grid ─────────────────────────────────── */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 480px) { .stack-grid { grid-template-columns: 1fr; } }
+
+    /* ─── Thank You / Results ────────────────────────── */
+    .thankyou-icon { font-size: 56px; text-align: center; margin-bottom: 16px; }
+
+    .thankyou-headline {
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .thankyou-sub {
+      font-size: 15px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .summary-card {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+    }
+
+    .summary-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .summary-value {
+      font-size: 14px;
+      color: var(--white);
+      line-height: 1.5;
+    }
+
+    .taptico-footer {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .taptico-footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-wrap">
+      <img
+        class="logo-img"
+        src="https://drive.google.com/uc?id=1aR68tiWxFp52PXDjZyS8P8VtmiheYkjo"
+        alt="Taptico"
+        onerror="this.style.display='none'; document.querySelector('.logo-text').style.display='block';"
+      />
+      <span class="logo-text" style="display:none;">TAPTICO</span>
+    </div>
+    <div class="step-label" id="step-label">Step 1 of 5</div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-wrap">
+    <div class="progress-fill" id="progress-fill" style="width: 20%"></div>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- ── STEP 1: Welcome ─────────────────────────── -->
+    <div class="step active" id="step-1">
+      <div class="welcome-badge">✦ AI Discovery</div>
+      <div class="welcome-headline">Where can <span>AI save your team</span> time?</div>
+      <p class="welcome-body">
+        We're mapping out where AI can have the biggest impact at The Stein Firm — from intake automation to case management to client communication.
+        Your answers help us build a real roadmap — not generic suggestions.
+      </p>
+      <div class="client-badge">
+        <strong>This is for Stein Firm team members only.</strong><br />
+        Takes about 3 minutes. Be as specific or candid as you want — the more honest you are, the better we can help.
+      </div>
+      <div class="feature-grid">
+        <div class="feature-chip"><div class="icon">⚡</div><div>3 min max</div></div>
+        <div class="feature-chip"><div class="icon">🔒</div><div>Internal only</div></div>
+        <div class="feature-chip"><div class="icon">🎯</div><div>Your roadmap</div></div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn btn-welcome" onclick="goTo(2)">Start the AI Discovery →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 2: Who Are You ─────────────────────── -->
+    <div class="step" id="step-2">
+      <div class="step-title">First, who are you?</div>
+      <p class="step-sub">We want to map responses to roles so we can spot patterns across the team.</p>
+
+      <div class="two-col">
+        <div class="field">
+          <label for="first-name">First Name <span style="color:#e63946;">*</span></label>
+          <input type="text" id="first-name" placeholder="Jane" autocomplete="given-name" />
+        </div>
+        <div class="field">
+          <label for="last-name">Last Name <span style="color:#e63946;">*</span></label>
+          <input type="text" id="last-name" placeholder="Smith" autocomplete="family-name" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email Address <span style="color:#e63946;">*</span></label>
+        <input type="email" id="email" placeholder="contact@thesteinfirm.com" autocomplete="email" />
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone <span style="color:var(--muted); font-size:11px; text-transform:none; font-weight:400;">(optional)</span></label>
+        <input type="tel" id="phone" placeholder="+1 (770) 000-0000" autocomplete="tel" />
+      </div>
+
+      <div class="field">
+        <label for="role">Your Role / Department <span style="color:#e63946;">*</span></label>
+        <select id="role">
+          <option value="" disabled selected>Select your role</option>
+          <option value="Estimator">Estimator</option>
+          <option value="Project Manager">Project Manager</option>
+          <option value="Operations">Operations</option>
+          <option value="Sales / Business Development">Sales / Business Development</option>
+          <option value="Executive / Leadership">Executive / Leadership</option>
+          <option value="Accounting / Finance">Accounting / Finance</option>
+          <option value="Admin / Office">Admin / Office</option>
+          <option value="Field / Install">Field / Install</option>
+          <option value="Purchasing / Procurement">Purchasing / Procurement</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(1)">← Back</button>
+        <button class="btn btn-primary" onclick="validateStep2()">Next →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: Where Time Goes ─────────────────── -->
+    <div class="step" id="step-3">
+      <div class="step-title">Where does your time go?</div>
+      <p class="step-sub">Check everything that eats up meaningful hours in a typical week at The Stein Firm.</p>
+
+      <div class="check-grid" id="workflow-checks">
+        <div class="check-item" data-value="Bid prep & estimates" onclick="toggleCheck(this)">
+          <input type="checkbox" /><div class="check-box"></div>
+          <span class="check-text">📋 Bid prep &amp; estimates</span>
+        </div>
+        <div class="check-item" data-value="Client communication & follow-up" onclick="toggleCheck(this)">
+          <input type="checkbox" /><div class="check-box"></div>
+          <span class="check-text">📞 Client communication &amp; follow-up</span>
+        </div>
+        <div class="check-item" data-value="Project tracking & status updates" onclick="toggleCheck(this)">
+          <input type="checkbox" /><div class="check-box"></div>
+          <span class="check-text">📁 Project tracking &amp; status updates</span>
+        </div>
+        <div class="check-item" data-value="Scheduling crews / subcontractors" onclick="toggleCheck(this)">
+          <input type="checkbox" /><div class="check-box"></div>
+          <span class="check-text">🔧 Scheduling crews / subs</span>
+        </div>
+        <div class="check-item" data-value="Document management (drawings, specs, submittals)" onclick="toggleCheck(this)">
+          <input type="checkbox" /><div class="check-box"></div>
+          <span class="check-text">📄 Drawings, specs &amp; submittals</span>
+        </div>
+        <div class="check-item" data-value="Invoicing & accounts receivable" onclick="toggleCheck(this)">
+          <input type="checkbox" /><div class="check-box"></div>
+          <span class="check-text">💰 Invoicing &amp; AR</span>
+        </div>
+        <div class="check-item" data-value="Purchase orders & procurement" onclick="toggleCheck(this)">
+          <input type="checkbox" /><div class="check-box"></div>
+          <span class="check-text">🛒 Purchase orders &amp; procurement</span>
+        </div>
+        <div class="check-item" data-value="Reporting & job costing" onclick="toggleCheck(this)">
+          <input type="checkbox" /><div class="check-box"></div>
+          <span class="check-text">📊 Reporting &amp; job costing</span>
+        </div>
+        <div class="check-item" data-value="Finding & tracking new project opportunities" onclick="toggleCheck(this)">
+          <input type="checkbox" /><div class="check-box"></div>
+          <span class="check-text">🔍 Finding new opportunities / bids</span>
+        </div>
+        <div class="check-item" data-value="Email & internal communication overload" onclick="toggleCheck(this)">
+          <input type="checkbox" /><div class="check-box"></div>
+          <span class="check-text">📧 Email &amp; internal comms overload</span>
+        </div>
+        <div class="check-item" data-value="Getting info from field teams" onclick="toggleCheck(this)">
+          <input type="checkbox" /><div class="check-box"></div>
+          <span class="check-text">👷 Getting info from field teams</span>
+        </div>
+        <div class="check-item" data-value="Other admin tasks" onclick="toggleCheck(this)">
+          <input type="checkbox" /><div class="check-box"></div>
+          <span class="check-text">⚙️ Other admin tasks</span>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(2)">← Back</button>
+        <button class="btn btn-primary" onclick="goTo(4)">Next →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 4: Pain Points ─────────────────────── -->
+    <div class="step" id="step-4">
+      <div class="step-title">What's slowing you down?</div>
+      <p class="step-sub">Be brutally honest — this goes directly to the team building your AI roadmap.</p>
+
+      <div class="field">
+        <label>Biggest pain points (check all that apply)</label>
+        <div class="check-grid" id="pain-checks" style="margin-top: 10px;">
+          <div class="check-item" data-value="Bid/proposal creation takes too long" onclick="toggleCheck(this)">
+            <input type="checkbox" /><div class="check-box"></div>
+            <span class="check-text">⏱ Bid/proposal creation takes too long</span>
+          </div>
+          <div class="check-item" data-value="Hard to track project status across the team" onclick="toggleCheck(this)">
+            <input type="checkbox" /><div class="check-box"></div>
+            <span class="check-text">🌀 Hard to track project status</span>
+          </div>
+          <div class="check-item" data-value="Client follow-up falls through the cracks" onclick="toggleCheck(this)">
+            <input type="checkbox" /><div class="check-box"></div>
+            <span class="check-text">🐌 Client follow-up falls through cracks</span>
+          </div>
+          <div class="check-item" data-value="Too much manual data entry between systems" onclick="toggleCheck(this)">
+            <input type="checkbox" /><div class="check-box"></div>
+            <span class="check-text">📝 Too much manual data entry</span>
+          </div>
+          <div class="check-item" data-value="Finding new bid opportunities is reactive/manual" onclick="toggleCheck(this)">
+            <input type="checkbox" /><div class="check-box"></div>
+            <span class="check-text">🔍 Finding bids is reactive &amp; manual</span>
+          </div>
+          <div class="check-item" data-value="Reporting and job costing takes forever" onclick="toggleCheck(this)">
+            <input type="checkbox" /><div class="check-box"></div>
+            <span class="check-text">⏳ Reporting &amp; job costing takes forever</span>
+          </div>
+          <div class="check-item" data-value="Too many disconnected tools and spreadsheets" onclick="toggleCheck(this)">
+            <input type="checkbox" /><div class="check-box"></div>
+            <span class="check-text">🧱 Too many disconnected tools</span>
+          </div>
+          <div class="check-item" data-value="Getting consistent info from field teams" onclick="toggleCheck(this)">
+            <input type="checkbox" /><div class="check-box"></div>
+            <span class="check-text">👷 Inconsistent info from field teams</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:24px;">
+        <label for="pain-text">Describe your single biggest frustration <span style="color:var(--muted); font-size:11px; text-transform:none; font-weight:400;">(in your own words)</span></label>
+        <textarea id="pain-text" placeholder="e.g. We spend hours every week manually building bid packages that could probably be templated. Or: we have no idea where any project stands unless we call someone..."></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(3)">← Back</button>
+        <button class="btn btn-primary" onclick="goTo(5)">Next →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 5: Tools + Submit ──────────────────── -->
+    <div class="step" id="step-5">
+      <div class="step-title">What tools are you running?</div>
+      <p class="step-sub">Helps us spot integration opportunities. Fill in what you know — doesn't need to be exhaustive.</p>
+
+      <div class="stack-grid">
+        <div class="field">
+          <label for="crm">CRM</label>
+          <input type="text" id="crm" placeholder="HubSpot, Salesforce, Procore…" />
+        </div>
+        <div class="field">
+          <label for="project-mgmt">Project Management</label>
+          <input type="text" id="project-mgmt" placeholder="Procore, Buildertrend, Monday…" />
+        </div>
+        <div class="field">
+          <label for="communication">Communication</label>
+          <input type="text" id="communication" placeholder="Teams, Slack, email only…" />
+        </div>
+        <div class="field">
+          <label for="other-tools">Other Tools</label>
+          <input type="text" id="other-tools" placeholder="QuickBooks, Bluebeam, Sage…" />
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(4)">← Back</button>
+        <button class="btn btn-primary" id="submit-btn" onclick="submitForm()">Submit My Responses →</button>
+      </div>
+
+      <p style="margin-top:16px; font-size:12px; color:var(--muted); text-align:center;">
+        Your responses go directly to the Taptico team building your AI roadmap.
+      </p>
+    </div>
+
+    <!-- ── STEP 6: Thank You ───────────────────────── -->
+    <div class="step" id="step-6">
+      <div class="thankyou-icon">🎯</div>
+      <div class="thankyou-headline">You're in the roadmap.</div>
+      <p class="thankyou-sub">
+        Your responses have been received. The Taptico team is collecting input from across the Stein Firm team
+        and will use it to build a customized AI implementation plan — mapped specifically to how your
+        business actually works.
+      </p>
+
+      <div id="summary-block"></div>
+
+      <div class="summary-card" style="background: rgba(67,97,238,0.08); border-color: rgba(67,97,238,0.25); text-align:center; margin-top: 24px;">
+        <p style="font-size: 14px; color: var(--muted); margin-bottom:8px;">Questions? Reach the Taptico team at</p>
+        <a href="mailto:hello@taptico.com" style="color: var(--accent); font-weight: 600; font-size: 15px;">hello@taptico.com</a>
+      </div>
+
+      <div class="taptico-footer" style="margin-top: 28px;">
+        Powered by <a href="https://taptico.com" target="_blank">Taptico</a> — AI built for your business
+      </div>
+    </div>
+
+  </div><!-- /.card -->
+
+  <script>
+    // ── Config ──────────────────────────────────────────
+    // Replace this URL after deploying the Google Apps Script
+    const WEBHOOK_URL = 'APPS_SCRIPT_URL_HERE';
+
+    let currentStep = 1;
+    const TOTAL_STEPS = 5;
+
+    // ── Navigation ──────────────────────────────────────
+    function goTo(n) {
+      const from = document.getElementById('step-' + currentStep);
+      const to   = document.getElementById('step-' + n);
+      if (!to) return;
+      from.classList.remove('active');
+      to.classList.add('active');
+      currentStep = n;
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateProgress() {
+      const fill  = document.getElementById('progress-fill');
+      const label = document.getElementById('step-label');
+      if (currentStep >= 6) {
+        fill.style.width = '100%';
+        label.textContent = 'Complete ✓';
+      } else {
+        fill.style.width = ((currentStep / TOTAL_STEPS) * 100) + '%';
+        label.textContent = 'Step ' + currentStep + ' of ' + TOTAL_STEPS;
+      }
+    }
+
+    function toggleCheck(el) {
+      el.classList.toggle('checked');
+    }
+
+    function getChecked(containerId) {
+      const container = document.getElementById(containerId);
+      return Array.from(container.querySelectorAll('.check-item.checked')).map(i => i.dataset.value);
+    }
+
+    // ── Validation ──────────────────────────────────────
+    function validateStep2() {
+      const firstName = document.getElementById('first-name');
+      const lastName  = document.getElementById('last-name');
+      const email     = document.getElementById('email');
+      const role      = document.getElementById('role');
+
+      let valid = true;
+      [firstName, lastName, email, role].forEach(el => {
+        el.classList.remove('field-error');
+        if (!el.value.trim()) { el.classList.add('field-error'); valid = false; }
+      });
+
+      if (email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+        email.classList.add('field-error');
+        valid = false;
+      }
+
+      if (valid) goTo(3);
+    }
+
+    // ── Submit ──────────────────────────────────────────
+    function submitForm() {
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'Submitting…';
+
+      const payload = {
+        firstName:     document.getElementById('first-name').value.trim(),
+        lastName:      document.getElementById('last-name').value.trim(),
+        email:         document.getElementById('email').value.trim(),
+        phone:         document.getElementById('phone').value.trim(),
+        role:          document.getElementById('role').value,
+        company:       'The Stein Firm',
+        workflows:     getChecked('workflow-checks'),
+        pains:         getChecked('pain-checks'),
+        painText:      document.getElementById('pain-text').value.trim(),
+        crm:           document.getElementById('crm').value.trim(),
+        projectMgmt:   document.getElementById('project-mgmt').value.trim(),
+        communication: document.getElementById('communication').value.trim(),
+        otherTools:    document.getElementById('other-tools').value.trim(),
+        source:        'disco.taptico.com/steinfirm',
+        submittedAt:   new Date().toISOString()
+      };
+
+      // Show thank-you immediately for better UX, then fire webhook
+      showThankYou(payload);
+
+      // Fire webhook (non-blocking)
+      if (WEBHOOK_URL && WEBHOOK_URL !== 'APPS_SCRIPT_URL_HERE') {
+        fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' }, // Apps Script requires text/plain for CORS
+          body: JSON.stringify(payload)
+        }).catch(err => console.warn('Webhook failed (non-critical):', err));
+      }
+    }
+
+    function showThankYou(data) {
+      // Build summary
+      const summaryEl = document.getElementById('summary-block');
+      const items = [
+        { label: 'Name', value: `${data.firstName} ${data.lastName}` },
+        { label: 'Role', value: data.role },
+        { label: 'Top time sinks', value: data.workflows.length ? data.workflows.join(', ') : 'None selected' },
+        { label: 'Key pain points', value: data.pains.length ? data.pains.join(', ') : 'None selected' },
+      ];
+      if (data.painText) {
+        items.push({ label: 'In their own words', value: `"${data.painText}"` });
+      }
+
+      summaryEl.innerHTML = items.map(item => `
+        <div class="summary-card">
+          <div class="summary-label">${item.label}</div>
+          <div class="summary-value">${item.value}</div>
+        </div>
+      `).join('');
+
+      goTo(6);
+    }
+  </script>
+</body>
+</html>
