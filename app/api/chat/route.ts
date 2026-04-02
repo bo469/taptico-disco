@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
 
     // Persist incoming user message to Supabase (best-effort, non-blocking)
     const supabaseAdmin = getSupabaseAdmin()
-    if (lastMessage && lastMessage.role === 'user') {
+    if (lastMessage && lastMessage.role === 'user' && supabaseAdmin) {
       supabaseAdmin
         .from('messages')
         .insert({
@@ -94,6 +94,7 @@ export async function POST(request: NextRequest) {
       .join('\n')
 
     // Persist assistant reply to Supabase (best-effort, non-blocking)
+    supabaseAdmin &&
     supabaseAdmin
       .from('messages')
       .insert({
@@ -107,7 +108,7 @@ export async function POST(request: NextRequest) {
       })
 
     // Update user XP: upsert row, increment interviews_done on first message
-    if (userIdentifier) {
+    if (userIdentifier && supabaseAdmin) {
       const isFirstMessage = messages.length === 1
       if (isFirstMessage) {
         supabaseAdmin
